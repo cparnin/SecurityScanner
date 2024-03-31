@@ -3,18 +3,7 @@
 ##############################  NOTES #######################################
 
 '''
-Python Virtual Environment Instructions:
-    Create:
-        go into specific project directory
-        python -m venv <venv_name> # create virtual environment
-        source <venv_name>/bin/activate
-        pip install <package_names>
-        pip freeze > requirements.txt # save all installed packages to a file
-    Activate:
-        source <venv_name>/bin/activate
-        pip install -r requirements.txt
-        might have to change interpreter to:
-            /Users/parninc/Desktop/PythonSecurity/webapp/webappenv/bin/python3
+test
 '''
             
 ##############################  IMPORTS #######################################
@@ -24,6 +13,7 @@ import os
 from dotenv import load_dotenv
 import shodan
 import socket
+import argparse
 from urllib.parse import urlparse
 from datetime import datetime
 import json
@@ -44,9 +34,9 @@ def shodan_search(search_term):
         results = api.search(search_term)
         with open(output_file, 'w') as file:
             json.dump(results, file, indent=4)
-        print("Results saved to {output_file}")    
+        print("Results saved to {output_file}")
     except shodan.APIError as e: 
-        print('Error: {}'.format(e))
+        print(f"Error during Shodan search for '{search_term}': {e}")
 
 def nmap_vulners_scan(target):
     # Resolve URL to IP if needed
@@ -55,7 +45,7 @@ def nmap_vulners_scan(target):
         try:
             target = socket.gethostbyname(domain)
         except socket.gaierror:
-            print(f"Could not resolve {domain}")
+            print(f"Error resolving domain '{domain}': DNS lookup failed")
             return
         
     datetime_stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
